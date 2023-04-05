@@ -18,7 +18,7 @@ from rlkit.torch.sac.agent import  ExpAgentFin, PEARLAgent2
 from rlkit.launchers.launcher_util import setup_logger
 import rlkit.torch.pytorch_util as ptu
 from configs.default import default_config_exp as default_config
-from metaworld import ML1
+# from metaworld import ML1
 
 
 def experiment(variant):

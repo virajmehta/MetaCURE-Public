@@ -642,7 +642,8 @@ class ExpAlgorithmFin2(metaclass=abc.ABCMeta):
             rsample_rate=5,
             pie_hidden_dim=64,
             rsample_rate_eval = 1,
-            metaworld_sparse=False
+            metaworld_sparse=False,
+            **kwargs
     ):
         """
         :param env: training env

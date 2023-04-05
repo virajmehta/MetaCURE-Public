@@ -19,7 +19,7 @@
         "embedding_batch_size": 64,
         "embedding_mini_batch_size": 64,
         "batch_size": 64,
-        "max_path_length": 32,
+        "max_path_length": 100,
         "discount": 0.90,
         "reward_scale": 100.0,
         "kl_lambda": 1e-3,

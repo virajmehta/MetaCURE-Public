@@ -17,7 +17,7 @@
         "num_steps_per_eval": 128,
         "embedding_batch_size": 1024,
         "embedding_mini_batch_size": 1024,
-        "max_path_length": 32,
+        "max_path_length": 100,
         "discount": 0.90,
         "reward_scale": 100.0,
         "sparse_rewards": 1,
