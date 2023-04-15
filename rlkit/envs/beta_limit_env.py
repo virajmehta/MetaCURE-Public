@@ -6,11 +6,11 @@ import pickle as pkl
 import gym
 import numpy as np
 
+from . import register_env
 from dynamics_toolbox.utils.storage.qdata import load_from_hdf5
 from dynamics_toolbox.utils.storage.model_storage import load_model_from_log_dir
-
-from beta_limit_helper.envs.env_model import EnvModel
-from beta_limit_helper.data_management.mb_start_selectors import StartSelector
+from .beta_limit_helper.envs.env_model import EnvModel
+from .beta_limit_helper.data_management.mb_start_selectors import StartSelector
 
 DEFAULT_STATE_SPACE = (
     "betan_EFIT01",
@@ -19,12 +19,12 @@ DEFAULT_STATE_SPACE = (
     "pinj_prev_delta",
 )
 BETA_TAG = "betan_EFIT01"
-DEFAULT_MODEL_PATH = "./beta_limit_helper/config/mlp_beta_only"
+DEFAULT_MODEL_PATH = "./rlkit/envs/beta_limit_helper/config/mlp_beta_only"
 DEFAULT_MODEL_INFO_PATH = (
-    "./beta_limit_helper/config/beta_only_info.pkl"
+    "./rlkit/envs/beta_limit_helper/config/beta_only_info.pkl"
 )
 DEFAULT_START_DATA_PATH = (
-    "./beta_limit_helper/config/beta_only_data.hdf5"
+    "./rlkit/envs/beta_limit_helper/config/beta_only_data.hdf5"
 )
 
 
@@ -258,7 +258,7 @@ class BetaTrackingStartSelector(StartSelector):
             return self.starts[indices]
         return self.starts[:num_starts]
 
-
+@register_env("beta-limit")
 class BetaLimitEnv(gym.Env):
     def __init__(
         self,
@@ -268,6 +268,8 @@ class BetaLimitEnv(gym.Env):
         target=2,
         shuffle=True,
         max_episode_steps=30,
+        n_tasks=1, 
+        randomize_tasks=True
     ):
         self._model_env = BetaTrackingModelEnv(
             model_path,
@@ -287,11 +289,17 @@ class BetaLimitEnv(gym.Env):
             self.horizon = 15
         else:
             self.horizon = 30
+
         self.periodic_dimensions = []
         self.beta_limit_bounds = (2, 3)
         self.beta_limit = None
         self._max_episode_steps = max_episode_steps
+
+        # sampling n_tasks beta limits at once
+        self.tasks = self.sample_tasks(n_tasks)
+
         self.reset_task()
+        super().__init__()
 
     def reset(self, obs=None):
         if obs is None:
@@ -311,16 +319,23 @@ class BetaLimitEnv(gym.Env):
         rew = betas + (betas > self.beta_limit) * -5
         return result["obs"].flatten(), float(rew), False, {}
 
+    def get_all_task_idx(self):
+        return list(range(len(self.tasks)))
+
     def get_task(self):
         return [self.beta_limit]
 
     def set_task(self, task):
         self.beta_limit = task
 
-    def reset_task(self, task=None):
-        if task is None:
-            task = np.random.uniform(*self.beta_limit_bounds)
-        self.set_task(task)
+    def reset_task(self, idx = 0):
+        beta_limit = self.tasks[idx]['beta_limit']
+        self.set_task(beta_limit)
+    
+    def sample_tasks(self, num_tasks):
+        np.random.seed(1111)
+        beta_limits = np.random.uniform(*self.beta_limit_bounds, size=(num_tasks,))
+        return [{'beta_limit': beta_limit} for beta_limit in beta_limits]
 
     @property
     def observation_space(self):
