@@ -8,9 +8,9 @@ import numpy as np
 
 from dynamics_toolbox.utils.storage.qdata import load_from_hdf5
 from dynamics_toolbox.utils.storage.model_storage import load_model_from_log_dir
-from rlkit.envs.env_model import EnvModel
-from rlkit.data_management.mb_start_selectors import StartSelector
 
+from beta_limit_helper.envs.env_model import EnvModel
+from beta_limit_helper.data_management.mb_start_selectors import StartSelector
 
 DEFAULT_STATE_SPACE = (
     "betan_EFIT01",
@@ -19,12 +19,12 @@ DEFAULT_STATE_SPACE = (
     "pinj_prev_delta",
 )
 BETA_TAG = "betan_EFIT01"
-DEFAULT_MODEL_PATH = "/zfsauton/project/public/ichar/BetaTracking/models/mlp_beta_only"
+DEFAULT_MODEL_PATH = "./beta_limit_helper/config/mlp_beta_only"
 DEFAULT_MODEL_INFO_PATH = (
-    "/zfsauton/project/public/ichar/BetaTracking/data/beta_only/beta_only_info.pkl"
+    "./beta_limit_helper/config/beta_only_info.pkl"
 )
 DEFAULT_START_DATA_PATH = (
-    "/zfsauton/project/public/ichar/BetaTracking/data/beta_only/beta_only_data.hdf5"
+    "./beta_limit_helper/config/beta_only_data.hdf5"
 )
 
 
@@ -373,6 +373,7 @@ def test_beta_tracking_env():
         reset_obs = env.reset(obs)
         assert np.allclose(reset_obs, obs)
 
+    print("Test complete")
 
 if __name__ == "__main__":
     test_beta_tracking_env()

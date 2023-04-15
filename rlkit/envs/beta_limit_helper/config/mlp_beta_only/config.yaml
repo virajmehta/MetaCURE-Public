@@ -1,0 +1,34 @@
+trainer:
+  max_epochs: 1000
+  gpus: '0'
+data_module:
+  data_module_type: RegressionDataModule
+  batch_size: 256
+  val_proportion: 0.05
+  test_proportion: 0.05
+  pin_memory: true
+  num_workers: 12
+  data_source: /home/scratch/ichar/BetaTracking/data/rl_model_data/beta_only_data.hdf5
+early_stopping:
+  patience: 50
+  min_delta: 0.001
+model:
+  _target_: dynamics_toolbox.models.pl_models.mlp.MLP
+  model_name: MLP
+  model_type: MLP
+  num_ensemble_members: 1
+  sequential_train: false
+  num_layers: 5
+  layer_size: 200
+  loss_type: mae
+  learning_rate: 0.001
+  hidden_activation: tanh
+  input_dim: 5
+  output_dim: 1
+experiment_name: BetaTracking
+run_name: Model
+data_source: /home/scratch/ichar/BetaTracking/data/rl_model_data/beta_only_data.hdf5
+save_dir: /home/scratch/ichar/BetaTracking/models/mlp_beta_only
+logger: mlflow
+tune_metric: test/EV
+tune_objective: maximize
