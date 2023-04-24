@@ -1,0 +1,13 @@
+{
+    "env_name": "beta-limit",
+    "n_train_tasks": 60,
+    "n_eval_tasks": 20,
+    "latent_size": 2,
+    "env_params": {
+        "n_tasks": 80
+    },
+    "util_params": {
+        "base_log_dir":"outputpearl"
+
+    }
+}

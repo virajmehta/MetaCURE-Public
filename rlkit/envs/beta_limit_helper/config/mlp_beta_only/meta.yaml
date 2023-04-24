@@ -1,0 +1,15 @@
+artifact_uri: file:///home/scratch/ichar/BetaTracking/models/mlp_beta_only/1/9f5929bda2ef42c89e5fc15582e177f3/artifacts
+end_time: 1632103005840
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 9f5929bda2ef42c89e5fc15582e177f3
+run_uuid: 9f5929bda2ef42c89e5fc15582e177f3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1632101824867
+status: 3
+tags: []
+user_id: ichar
